@@ -1,3 +1,2 @@
 # personal-website
-
-a [Sails](http://sailsjs.org) application
+Personal Website based on Sails.js
