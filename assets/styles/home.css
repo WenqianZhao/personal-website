@@ -1,0 +1,18 @@
+.see-right {
+  float: right;
+}
+
+.see-right .nav-link {
+  color: rgba(255,255,255,.5);
+}
+
+.see-right .nav-link:hover {
+  color: #f7faff;
+}
+
+.home-body {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-image: url('../images/black-website-background.jpg');
+}

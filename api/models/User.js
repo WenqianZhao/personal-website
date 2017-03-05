@@ -18,7 +18,7 @@ module.exports = {
   		unique: true,
   		required: true
   	},
-  	password: {
+  	password_hash: {
   		type: 'string',
   		required: true
   	},

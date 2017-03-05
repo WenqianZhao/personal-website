@@ -1,18 +1,26 @@
-<h2>Signup</h2>
-<div>
-  <form class="signup" method="post" action="/signup">
-    <label>Username</label>
-    <input name="username" type="text" placeholder="Username" />
-    <br/>
+<div class="signup-background">
+    <div class="container signup">
 
-    <label>Email</label>
-    <input name="email" type="text" placeholder="Your Email" />
-    <br/>
+      <form class="form-signin" method="post" action="/signup">
+        <div class="row">
+            <div class="col-5 signup-login">
+                <p>SignUp</p>
+            </div>
+            <div class="col-2">
+                <p class="seperator">|</p>
+            </div>
+            <div class="col-5 signup-login">
+                <a href="/login" class="focused">Login</a>
+            </div>
+        </div>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="email" required autofocus>
+        <label for="inputUsername" class="sr-only">Username</label>
+        <input type="username" id="inputUsername" class="form-control" placeholder="Username" name="username" required>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+      </form>
 
-    <label>Password</label>
-    <input name="password" type="password" placeholder="Password" />
-    <br/>
-
-    <button id="submitSignup" type="submit">Submit</button>
-  </form>
+    </div>
 </div>
