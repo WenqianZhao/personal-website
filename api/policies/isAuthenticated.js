@@ -1,29 +1,25 @@
 module.exports = function (req, res, next) {
-  var token;
-
-  if (req.headers && req.headers.authorization) {
-    var parts = req.headers.authorization.split(' ');
-    if (parts.length == 2) {
-      var scheme = parts[0],
-        credentials = parts[1];
-
-      if (/^Bearer$/i.test(scheme)) {
-        token = credentials;
-      }
-    } else {
-      return res.json(401, {err: 'Format is Authorization: Bearer [token]'});
+  if(req.header('Authorization')) {
+    var token = req.header('Authorization').split('Bear ')[1];
+    if(!token){
+      return res.redirect('/');
     }
-  } else if (req.param('token')) {
-    token = req.param('token');
-    // We delete the token from param to not mess with blueprints
-    delete req.query.token;
-  } else {
-    return res.json(401, {err: 'No Authorization header was found'});
+
+    return JWTService.verifyJWT(token, function(err, payload){
+      if(err) {
+        return res.redirect('/');
+      }
+      if(!payload.id) {
+        return res.redirect('/');
+      }
+    });
+  } else if(req.header('Logout')) {
+    return next();
   }
 
-  jwToken.verify(token, function (err, token) {
-    if (err) return res.json(401, {err: 'Invalid Token!'});
-    req.token = token; // This is the decrypted token or the payload you provided
-    next();
-  });
+  if (req.wantsJSON) {
+    return res.send(401);
+  }
+
+  return res.redirect('/');
 };

@@ -23,7 +23,12 @@ module.exports = {
 				})
 				.exec(function(err, user){
 					if (err) return res.negotiate(err);
-					return res.json(200, {token: JWTService.generateJWT(user)});
+					else{
+						var responseData = {
+							token: JWTService.generateJWT(user)
+						}
+					}
+					return ResponseService.json(200, res, 1000, responseData);
 				});
 	    });
 		});
@@ -37,15 +42,18 @@ module.exports = {
 			email: email
 		})
 		.exec(function(err, user){
-			if (err) throw err;
-			if (!user) return res.json(401, {err: 'Could not find user.'});
+			if (err) return ResponseService.json(400, res, 1001, err.Errors);
+			if (!user) return ResponseService.json(400, res, 1002);
 			bcrypt.compare(password, user.password_hash, function(err, valid) {
-			  if (err) return res.negotiate(err);;
+			  if (err) return ResponseService.json(400, res, 1003, err.Errors);;
 			  // valid === true
 			  if(valid) {
-					return res.json(200, {token: JWTService.generateJWT(user)});
+			  	var responseData = {
+					token: JWTService.generateJWT(user)
+				}
+			  	return ResponseService.json(200, res, 1004, responseData);
 			  } else {
-			  	return res.json(401, {err: 'Wrong Password.'});
+			  	return ResponseService.json(400, res, 1005);
 			  }
 			});
 		});

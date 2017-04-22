@@ -37,9 +37,9 @@ module.exports.routes = {
   },
   '/zh-cn': {view: 'homepage-cn'},
   'get /login': {view : 'auth/login'},
-  'post /login': 'UserController.login',
+  'post /login': 'AuthController.login',
   'get /signup': {view : 'auth/signup'},
-  'post /signup': 'UserController.signup',
+  'post /signup': 'AuthController.signup',
 
 
   /***************************************************************************
