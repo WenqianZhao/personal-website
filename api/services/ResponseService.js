@@ -25,4 +25,6 @@ const message = {
 	1003: "Error occurs when comparing passwords.",
 	1004: "Successfully logged in.",
 	1005: "Wrong password.",
+	1006: "User has already registered.",
+	1007: "Error occurs when creating a user.",
 }

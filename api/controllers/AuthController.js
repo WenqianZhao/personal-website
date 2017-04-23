@@ -13,24 +13,42 @@ module.exports = {
 		var email = params.email;
 		var password = params.password;
 		var saltRounds = 10;
-		bcrypt.genSalt(saltRounds, function(err, salt) {
-	    bcrypt.hash(password, salt, function(err, hash) {
-	    	User.create({
-					username: username,
-					email: email,
-					password_hash: hash,
-					role: 'NormalUser'
+		User.findOne({
+			email: email
+		})
+		.exec(function(err, user){
+			if (err) return ResponseService.json(400, res, 1001, err.Errors);
+			if (user) return ResponseService.json(200, res, 1006);
+			else{
+				User.findOne({
+					username: username
 				})
-				.exec(function(err, user){
-					if (err) return res.negotiate(err);
+				.exec(function(err, user2){
+					if (err) return ResponseService.json(400, res, 1001, err.Errors);
+					if (user2) return ResponseService.json(200, res, 1006);
 					else{
-						var responseData = {
-							token: JWTService.generateJWT(user)
-						}
+						bcrypt.genSalt(saltRounds, function(err, salt) {
+					    bcrypt.hash(password, salt, function(err, hash) {
+					    	User.create({
+									username: username,
+									email: email,
+									password_hash: hash,
+									role: 'NormalUser'
+								})
+								.exec(function(err, user3){
+									if (err) return ResponseService.json(400, res, 1007, err.Errors);
+									else{
+										var responseData = {
+											token: JWTService.generateJWT(user3)
+										}
+									}
+									return ResponseService.json(200, res, 1000, responseData);
+								});
+					    });
+						});
 					}
-					return ResponseService.json(200, res, 1000, responseData);
 				});
-	    });
+			}
 		});
 	},
 
@@ -43,9 +61,9 @@ module.exports = {
 		})
 		.exec(function(err, user){
 			if (err) return ResponseService.json(400, res, 1001, err.Errors);
-			if (!user) return ResponseService.json(400, res, 1002);
+			if (!user) return ResponseService.json(200, res, 1002);
 			bcrypt.compare(password, user.password_hash, function(err, valid) {
-			  if (err) return ResponseService.json(400, res, 1003, err.Errors);;
+			  if (err) return ResponseService.json(200, res, 1003, err.Errors);;
 			  // valid === true
 			  if(valid) {
 			  	var responseData = {
@@ -53,7 +71,7 @@ module.exports = {
 				}
 			  	return ResponseService.json(200, res, 1004, responseData);
 			  } else {
-			  	return ResponseService.json(400, res, 1005);
+			  	return ResponseService.json(200, res, 1005);
 			  }
 			});
 		});

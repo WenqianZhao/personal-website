@@ -1,10 +1,9 @@
 var jwt = require('jsonwebtoken');
-var secret = "PeterZhao's Website";
+var secret = sails.config.local.secret;
 
 module.exports = {
 	generateJWT: function(user) {
 		var payload = {
-			id: user.id,
 			username: user.username,
 			email: user.email,
 			role: user.role,
