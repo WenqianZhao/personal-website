@@ -6,9 +6,48 @@
  */
 
 module.exports = {
-
   attributes: {
-
+  	id: {
+  		type: 'integer',
+  		primaryKey: true,
+      autoIncrement: true
+  	},
+  	title: {
+  		type: 'string',
+  		required: true,
+  		unique: true,
+  	},
+  	author: {
+  		model: 'user'
+  	},
+  	tags: {
+  		collection: 'tag',
+  		via: 'posts'
+  	},
+  	content: {
+  		type: 'longtext',
+  		required: true
+  	},
+  	abstract: {
+  		type: 'text',
+  		required: true
+  	},
+  	clicks: {
+  		type: 'integer',
+  		defaultsTo: 0
+  	},
+  	likes: {
+  		type: 'integer',
+  		defaultsTo: 0
+  	},
+  	reposts: {
+  		type: 'integer',
+  		defaultsTo: 0
+  	},
+  	comments: {
+  		collection: 'comment',
+  		via: 'post'
+  	}
   }
 };
 

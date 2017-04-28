@@ -40,6 +40,10 @@ module.exports.routes = {
   'post /login': 'AuthController.login',
   'get /signup': {view : 'auth/signup'},
   'post /signup': 'AuthController.signup',
+  'get /posts/getall': 'PostController.getAllPosts',
+  'get /posts/getone': 'PostController.getPostById',
+  'post /posts/create': 'PostController.createPost',
+  'post /posts/modify': 'PostController.modifyPost',
 
 
   /***************************************************************************

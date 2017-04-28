@@ -40,7 +40,7 @@ module.exports = {
 									else{
 										var responseData = {
 											token: JWTService.generateJWT(user3)
-										}
+										};
 									}
 									return ResponseService.json(200, res, 1000, responseData);
 								});

@@ -10,7 +10,8 @@ module.exports = {
   attributes: {
   	id: {
   		type: 'integer',
-  		primaryKey: true
+  		primaryKey: true,
+      autoIncrement: true
   	},
   	username: {
   		type: 'string',
@@ -39,6 +40,18 @@ module.exports = {
   		type: 'integer',
   		defaultsTo: null
   	},
+    gender: {
+      // 1 stands for male, 2 is female, 3 is other
+      type: 'integer'
+    },
+    posts: {
+      collection: 'post',
+      via: 'author'
+    },
+    comments: {
+      collection: 'comment',
+      via: 'commentby'
+    },
   	role: {
   		type: 'string',
   		enum: ['Admin', 'NormalUser']

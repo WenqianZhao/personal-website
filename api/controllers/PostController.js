@@ -6,6 +6,162 @@
  */
 
 module.exports = {
-	
+	/**
+	 * Get all posts
+	 * @param  {obj}  	req
+	 * @param  {obj}	res
+	 * @return {obj}
+	 */
+	getAllPosts: function(req, res) {
+		Post.find()
+		.exec(function(err, posts){
+			if(err) return ResponseService.json(400, res, 1500, err.Errors);
+			if(posts.length === 0){
+				// No post now
+				return ResponseService.json(200, res, 1501);
+			} else {
+				var responseData = posts.map(function (onePost) {
+					return {
+						post_id: onePost.id,
+						post_title: onePost.title,
+						post_abstract: onePost.abstract,
+						post_author: onePost.author
+					}
+				});
+				return ResponseService.json(200, res, 1502, responseData);
+			}
+		});
+	},
+
+	/**
+	 * Get one post by its id
+	 * @param  {obj}  	req
+	 * @param  {obj}	res
+	 * @return {obj}
+	 */
+	getPostById: function(req, res) {
+		var params = req.params.all();
+		var postID = params.postID;
+		Post.find({
+			id: postID
+		})
+		.populate('author')
+		.populate('tags')
+		.populate('comments')
+		.exec(function(err, post){
+			if(err) return ResponseService.json(400, res, 1503, err.Errors);
+			if(post.length === 0){
+				// Doesn't find that post
+				return ResponseService.json(200, res, 1504);
+			} else {
+				var responseData = {
+					post: post
+				}
+				return ResponseService.json(200, res, 1505, responseData);
+			}
+		});
+	},
+
+	createPost: function(req, res) {
+		var params = req.params.all();
+		var title = params.title;
+		var content = params.content;
+		var tags = params.tags.split(',');
+		var abstract = params.abstract;
+		var authorEmail = params.email;
+		// count the number of tags added
+		var counter = 0;
+		var tagIDs = [];
+		// First check whether the post title already exists
+		Post.findOne({
+			title: title
+		})
+		.exec(function(err, post){
+			if(err) return ResponseService.json(400, res, 1503, err.Errors);
+			if(post) return ResponseService.json(200, res, 1506);
+			else {
+				// get the author
+				User.findOne({
+					email: authorEmail
+				})
+				.exec(function(err, user){
+					if(err) return ResponseService.json(400, res, 1511, err.Errors);
+					// create post
+					Post.create({
+						title: title,
+						content: content,
+						abstract: abstract,
+						author: user.id
+					})
+					.exec(function(err, newPost){
+						if(err) return ResponseService.json(400, res, 1507, err.Errors);
+						tags.forEach(function(tag){
+							Tag.findOrCreate({
+								content: tag
+							})
+							.exec(function(err, oneTag){
+								if(err) return ResponseService.json(400, res, 1508, err.Errors);
+								// add post to tag
+								oneTag.posts.add(newPost.id);
+								oneTag.save(function(err){
+									if(err) return ResponseService.json(400, res, 1509, err.Errors);
+									else{
+										tagIDs.push(oneTag.id);
+										if(tagIDs.length === tags.length){
+											newPost.tags.add(tagIDs);
+											newPost.save(function(err){
+												if(err) return ResponseService.json(400, res, 1510, err.Errors);
+												return ResponseService.json(200, res, 1512, {postID: newPost.id});
+											});
+										}
+									}
+								});
+							});
+						});
+					});
+				});
+			}
+		});
+	},
+
+	/**
+	 * Modify post. This function will not change one post's tag information.
+	 * use addTagToPost and removeTagFromPost to modify tag
+	 * @param  {obj} req 
+	 * @param  {obj} res
+	 * @return {obj}     success information or failure information
+	 */
+	modifyPost: function(req, res) {
+		var params = req.params.all();
+		var id = params.id;
+		var title = params.title;
+		var content = params.content;
+		var abstract = params.abstract;
+		// First check whether the post title already exists
+		Post.findOne({
+			title: title
+		})
+		.exec(function(err, post){
+			if(err) return ResponseService.json(400, res, 1503, err.Errors);
+			if(post) return ResponseService.json(200, res, 1506);
+			else {
+				// create post
+				Post.update({
+					id: id
+				},{
+					title: title,
+					content: content,
+					abstract: abstract
+				})
+				.exec(function(err, modifiedPost){
+					if(err) return ResponseService.json(400, res, 1507, err.Errors);
+					else {
+						return ResponseService.json(200, res, 1513);
+					}
+				});
+			}
+		});
+	}
+
 };
 
