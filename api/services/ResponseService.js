@@ -43,6 +43,8 @@ const message = {
 	1511: "Error occurs when finding a user.",
 	1512: "Successfully create a new post.",
 	1513: "Successfully modified a post.",
+	1514: "Error occurs when find a tag.",
+	1515: "Successfully get all posts by tag.",
 
 
 

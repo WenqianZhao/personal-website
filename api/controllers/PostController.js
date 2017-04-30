@@ -15,6 +15,7 @@ module.exports = {
 	getAllPosts: function(req, res) {
 		Post.find()
 		.populate('author')
+		.populate('tags')
 		.exec(function(err, posts){
 			if(err) return ResponseService.json(400, res, 1500, err.Errors);
 			if(posts.length === 0){
@@ -26,7 +27,11 @@ module.exports = {
 						post_id: onePost.id,
 						post_title: onePost.title,
 						post_abstract: onePost.abstract,
-						post_author: onePost.author
+						post_author: {
+							username: onePost.author.username,
+							email: onePost.author.email
+						},
+						post_tags: onePost.tags
 					}
 				});
 				return ResponseService.json(200, res, 1502, responseData);
@@ -65,6 +70,57 @@ module.exports = {
 		});
 	},
 
+	/**
+	 * Get posts by their tag
+	 * @param  {obj}  	req
+	 * @param  {obj}	res
+	 * @return {obj}
+	 */
+	getPostByTag: function(req, res) {
+		var params = req.params.all();
+		var tagContent = params.tag;
+		Tag.findOne({
+			content: tagContent
+		})
+		.populate('posts')
+		.exec(function(err, tag){
+			if(err) return ResponseService.json(400, res, 1514, err.Errors);
+			else {
+				var posts = tag.posts;
+				var retPostsArray = [];
+				posts.forEach(function(post){
+					Post.findOne({
+						id: post.id
+					})
+					.populate('author')
+					.populate('tags')
+					.exec(function(err, onePost){
+						var retPost = {
+							post_id: onePost.id,
+							post_title: onePost.title,
+							post_abstract: onePost.abstract,
+							post_author: {
+								username: onePost.author.username,
+								email: onePost.author.email
+							},
+							post_tags: onePost.tags
+						};
+						retPostsArray.push(retPost);
+						if(retPostsArray.length === posts.length){
+							return ResponseService.json(200, res, 1515, {posts: retPostsArray});
+						}
+					});
+				});
+			}
+		});
+	},
+
+	/**
+	 * Create a new post
+	 * @param  {obj} req 
+	 * @param  {obj} res 
+	 * @return {obj}     id of the new post or just error message
+	 */
 	createPost: function(req, res) {
 		var params = req.params.all();
 		var title = params.title;
