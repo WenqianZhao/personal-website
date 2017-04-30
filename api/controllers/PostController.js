@@ -14,6 +14,7 @@ module.exports = {
 	 */
 	getAllPosts: function(req, res) {
 		Post.find()
+		.populate('author')
 		.exec(function(err, posts){
 			if(err) return ResponseService.json(400, res, 1500, err.Errors);
 			if(posts.length === 0){
@@ -42,7 +43,7 @@ module.exports = {
 	getPostById: function(req, res) {
 		var params = req.params.all();
 		var postID = params.postID;
-		Post.find({
+		Post.findOne({
 			id: postID
 		})
 		.populate('author')
@@ -54,10 +55,12 @@ module.exports = {
 				// Doesn't find that post
 				return ResponseService.json(200, res, 1504);
 			} else {
-				var responseData = {
-					post: post
-				}
-				return ResponseService.json(200, res, 1505, responseData);
+				var userObj = {
+					email: post.author.email,
+					username: post.author.username
+				};
+				post.author = userObj;
+				return ResponseService.json(200, res, 1505, post);
 			}
 		});
 	},
