@@ -37,15 +37,19 @@ module.exports.routes = {
   },
   '/zh-cn': {view: 'homepage-cn'},
   'get /login': {view : 'auth/login'},
-  'post /login': 'AuthController.login',
   'get /signup': {view : 'auth/signup'},
+
+  'post /login': 'AuthController.login',
   'post /signup': 'AuthController.signup',
+
   'get /posts/getall': 'PostController.getAllPosts',
   'post /posts/getone': 'PostController.getPostById',
   'post /posts/getbytag': 'PostController.getPostByTag',
   'post /posts/create': 'PostController.createPost',
   'post /posts/modify': 'PostController.modifyPost',
+  'post /posts/updatecollection': 'PostController.updatePostWithCollection',
 
+  'get /tags/getall': 'TagController.getAllTags',
 
   /***************************************************************************
   *                                                                          *

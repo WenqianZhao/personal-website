@@ -45,6 +45,13 @@ const message = {
 	1513: "Successfully modified a post.",
 	1514: "Error occurs when find a tag.",
 	1515: "Successfully get all posts by tag.",
+	1516: "Error occurs when update a post.",
+	1517: "Successfully update a post.",
+
+	// 2000 ~ 2200 TagController
+	2000: "Error occurs when get all tags.",
+	2001: "No tag now.",
+	2002: "Successfully get all tags.",
 
 
 

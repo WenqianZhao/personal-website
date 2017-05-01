@@ -56,7 +56,7 @@ module.exports = {
 		.populate('comments')
 		.exec(function(err, post){
 			if(err) return ResponseService.json(400, res, 1503, err.Errors);
-			if(post.length === 0){
+			if(!post){
 				// Doesn't find that post
 				return ResponseService.json(200, res, 1504);
 			} else {
@@ -220,7 +220,37 @@ module.exports = {
 				});
 			}
 		});
-	}
+	},
+
+	/**
+	 * Add post to a user's collection or remove it from one's collection (for now just update post's likes attribute)
+	 * @param {obj} req 
+	 * @param {obj} res
+	 * @return {obj}     success information or failure information
+	 */
+	updatePostWithCollection: function(req, res) {
+		var params = req.params.all();
+		var postID = params.postID;
+		var addToCollection = params.addToCollection;
+		Post.findOne({
+			id: postID
+		})
+		.exec(function(err, post){
+			if(err) return ResponseService.json(400, res, 1503, err.Errors);
+			if(addToCollection){
+				var newLikes = post.likes + 1;
+			} else {
+				var newLikes = post.likes - 1;
+			}
+			Post.update({id:postID},{likes:newLikes})
+			.exec(function(err, updatedPost){
+				if(err) return ResponseService.json(400, res, 1516, err.Errors);
+				else {
+					return ResponseService.json(200, res, 1517, updatedPost[0]);
+				}
+			});
+		});
+	},
 
 };
 
