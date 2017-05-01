@@ -252,5 +252,46 @@ module.exports = {
 		});
 	},
 
+	/**
+	 * Search posts that contains the searchStr user input
+	 * @param  {obj} req 
+	 * @param  {obj} res 
+	 * @return {obj}     Error message or the matched posts
+	 */
+	searchPosts: function(req, res) {
+		var params = req.params.all();
+		var searchStr = params.searchStr;
+		Post.find({
+			or: [
+				{ title: { 'contains' : searchStr } },
+				{ abstract: { 'contains' : searchStr } },
+				{ content: { 'contains' : searchStr } },
+			]
+		})
+		.populate('author')
+		.populate('tags')
+		.exec(function(err, posts){
+			if(err) return ResponseService.json(400, res, 1518, err.Errors);
+			if(posts.length === 0){
+				// No matched post
+				return ResponseService.json(200, res, 1519);
+			} else {
+				var responseData = posts.map(function (onePost) {
+					return {
+						post_id: onePost.id,
+						post_title: onePost.title,
+						post_abstract: onePost.abstract,
+						post_author: {
+							username: onePost.author.username,
+							email: onePost.author.email
+						},
+						post_tags: onePost.tags
+					}
+				});
+				return ResponseService.json(200, res, 1520, responseData);
+			}
+		});
+	}
+
 };
 

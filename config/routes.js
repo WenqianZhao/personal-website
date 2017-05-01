@@ -48,6 +48,7 @@ module.exports.routes = {
   'post /posts/create': 'PostController.createPost',
   'post /posts/modify': 'PostController.modifyPost',
   'post /posts/updatecollection': 'PostController.updatePostWithCollection',
+  'post /posts/search': 'PostController.searchPosts',
 
   'get /tags/getall': 'TagController.getAllTags',
 
