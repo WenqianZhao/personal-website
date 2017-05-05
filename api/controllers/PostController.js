@@ -60,12 +60,22 @@ module.exports = {
 				// Doesn't find that post
 				return ResponseService.json(200, res, 1504);
 			} else {
-				var userObj = {
-					email: post.author.email,
-					username: post.author.username
-				};
-				post.author = userObj;
-				return ResponseService.json(200, res, 1505, post);
+				var clicks = post.clicks + 1;
+				Post.update({
+					id: postID
+				},{
+					clicks: clicks
+				})
+				.exec(function(err, newPost){
+					if(err) return ResponseService.json(400, res, 1516, err.Errors);
+					var userObj = {
+						email: post.author.email,
+						username: post.author.username
+					};
+					post.author = userObj;
+					post.clicks = clicks;
+					return ResponseService.json(200, res, 1505, post);
+				});
 			}
 		});
 	},
@@ -213,7 +223,7 @@ module.exports = {
 					abstract: abstract
 				})
 				.exec(function(err, modifiedPost){
-					if(err) return ResponseService.json(400, res, 1507, err.Errors);
+					if(err) return ResponseService.json(400, res, 1516, err.Errors);
 					else {
 						return ResponseService.json(200, res, 1513);
 					}
