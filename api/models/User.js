@@ -41,8 +41,11 @@ module.exports = {
   		defaultsTo: null
   	},
     gender: {
-      // 1 stands for male, 2 is female, 3 is other
+      // 1 stands for male, 2 is female, 3 is secret
       type: 'integer'
+    },
+    imgUrl: {
+      type: 'string'
     },
     posts: {
       collection: 'post',

@@ -27,6 +27,8 @@ const message = {
 	1005: "Wrong password.",
 	1006: "User has already registered.",
 	1007: "Error occurs when creating a user.",
+	1008: "Error occurs when update a user.",
+	1009: "Successfully update a user.",
 
 	// 1500 ~ 1999 PostController
 	1500: "Error occurs when find all posts.",

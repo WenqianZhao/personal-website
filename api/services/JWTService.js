@@ -7,6 +7,11 @@ module.exports = {
 			username: user.username,
 			email: user.email,
 			role: user.role,
+			firstname: user.firstname,
+			lastname: user.lastname,
+			age: user.age,
+			gender: user.gender,
+			imgUrl: user.imgUrl,
 		};
 		return jwt.sign(payload, secret, {expiresIn: "1h"});
 	},
