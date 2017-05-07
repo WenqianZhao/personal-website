@@ -41,10 +41,12 @@ module.exports.routes = {
 
   'post /login': 'AuthController.login',
   'post /signup': 'AuthController.signup',
-  
+
   'post /user/modify': 'UserController.modify',
+  'post /user/changepwd': 'UserController.changePassword',
 
   'get /posts/getall': 'PostController.getAllPosts',
+  'get /posts/gettop': 'PostController.getTopPosts',
   'post /posts/getone': 'PostController.getPostById',
   'post /posts/getbytag': 'PostController.getPostByTag',
   'post /posts/create': 'PostController.createPost',

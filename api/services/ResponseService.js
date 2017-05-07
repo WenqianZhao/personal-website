@@ -29,6 +29,8 @@ const message = {
 	1007: "Error occurs when creating a user.",
 	1008: "Error occurs when update a user.",
 	1009: "Successfully update a user.",
+	1010: "Error occurs when changing password.",
+	1011: "Successfully changed password.",
 
 	// 1500 ~ 1999 PostController
 	1500: "Error occurs when find all posts.",
@@ -52,6 +54,7 @@ const message = {
 	1518: "Error occurs when search posts.",
 	1519: "No post matched.",
 	1520: "Successfully find the matched posts",
+	1521: "Successfully get top5 posts.",
 
 	// 2000 ~ 2200 TagController
 	2000: "Error occurs when get all tags.",

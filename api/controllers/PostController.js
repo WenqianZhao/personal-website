@@ -39,6 +39,29 @@ module.exports = {
 		});
 	},
 
+	getTopPosts: function(req, res) {
+		Post.find()
+		.exec(function(err, posts){
+			if(err) return ResponseService.json(400, res, 1500, err.Errors);
+			if(posts.length === 0){
+				// No post now
+				return ResponseService.json(200, res, 1501);
+			} else {
+				posts.sort(PostService.sortFunction("clicks", -1));
+				var responseData = posts.map(function (onePost) {
+					return {
+						post_id: onePost.id,
+						post_title: onePost.title,
+						post_clicks: onePost.clicks,
+					}
+				});
+				responseData.splice(5);
+				// Only return top 5 posts
+				return ResponseService.json(200, res, 1521, responseData);
+			}
+		});
+	},
+
 	/**
 	 * Get one post by its id
 	 * @param  {obj}  	req

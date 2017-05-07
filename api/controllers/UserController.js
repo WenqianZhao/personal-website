@@ -4,6 +4,7 @@
  * @description :: Server-side logic for managing users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+var bcrypt = require('bcrypt');
 
 module.exports = {
 	/**
@@ -34,6 +35,49 @@ module.exports = {
 				token: JWTService.generateJWT(users[0])
 			}
 		  	return ResponseService.json(200, res, 1009, responseData);
+		});
+	},
+
+	changePassword: function(req, res) {
+		var params = req.params.all();
+		var email = params.email;
+		var oldpassword = params.oldpassword;
+		var newpassword = params.newpassword;
+		var saltRounds = 10;
+		User.findOne({
+			email: email
+		})
+		.exec(function(err, user) {
+			if (err) return ResponseService.json(400, res, 1001, err.Errors);
+			if (!user) return ResponseService.json(200, res, 1002);
+			bcrypt.compare(oldpassword, user.password_hash, function(err, valid) {
+			  if (err) return ResponseService.json(200, res, 1003, err.Errors);;
+			  // valid === true
+			  if(valid) {
+			  	// update password
+			  	bcrypt.genSalt(saltRounds, function(err, salt) {
+				    bcrypt.hash(newpassword, salt, function(err, hash) {
+				    	User.update({
+				    		email: email
+				    	},{
+				    		password_hash: hash
+				    	})
+				    	.exec(function (err, users) {
+				    		if(err) return ResponseService.json(400, res, 1010, err.Errors);
+				    		if (!users) return ResponseService.json(200, res, 1002);
+				    		else{
+								var responseData = {
+									token: JWTService.generateJWT(users[0])
+								};
+							}
+							return ResponseService.json(200, res, 1011, responseData);
+				    	});
+				    });
+				});
+			  } else {
+			  	return ResponseService.json(200, res, 1005);
+			  }
+			});
 		});
 	},
 };
