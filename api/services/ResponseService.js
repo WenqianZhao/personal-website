@@ -56,12 +56,16 @@ const message = {
 	1520: "Successfully find the matched posts",
 	1521: "Successfully get top5 posts.",
 
-	// 2000 ~ 2200 TagController
+	// 2000 ~ 2199 TagController
 	2000: "Error occurs when get all tags.",
 	2001: "No tag now.",
 	2002: "Successfully get all tags.",
 
-
-
+	// 2200 ~ 2699 CommentController
+	2200: "Error occurs when get all root comments for one post.",
+	2201: "No comment now.",
+	2202: "Successfully get all root comments for one post.",
+	2203: "Error occurs when add a root comment.",
+	2204: "Successfully add a root comment.",
 	
 }

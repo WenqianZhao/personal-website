@@ -56,6 +56,9 @@ module.exports.routes = {
 
   'get /tags/getall': 'TagController.getAllTags',
 
+  'post /comments/getbypost': 'CommentController.getAllComments',
+  'post /comments/add/root': 'CommentController.addRootComment',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

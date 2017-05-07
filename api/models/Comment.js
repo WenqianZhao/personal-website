@@ -16,6 +16,10 @@ module.exports = {
     post: {
       model: 'post'
     },
+    isRoot: {
+      type: 'boolean',
+      defaultsTo: false
+    },
     repliedbycomment: {
       model: 'comment',
       unique: true
