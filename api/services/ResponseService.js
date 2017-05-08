@@ -67,5 +67,9 @@ const message = {
 	2202: "Successfully get all root comments for one post.",
 	2203: "Error occurs when add a root comment.",
 	2204: "Successfully add a root comment.",
+	2205: "Error occurs when find one comment.",
+	2206: "No matched comment.",
+	2207: "Error occurs when update a comment.",
+	2208: "Successfully update a comment.",
 	
 }

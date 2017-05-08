@@ -58,6 +58,8 @@ module.exports.routes = {
 
   'post /comments/getbypost': 'CommentController.getAllComments',
   'post /comments/add/root': 'CommentController.addRootComment',
+  'post /comment/update/like': 'CommentController.updateCommentLikes',
+  'post /comment/update/dislike': 'CommentController.updateCommentDisLikes',
 
   /***************************************************************************
   *                                                                          *
