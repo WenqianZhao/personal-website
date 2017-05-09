@@ -21,8 +21,7 @@ module.exports = {
       defaultsTo: false
     },
     repliedbycomment: {
-      model: 'comment',
-      unique: true
+      model: 'comment'
     },
     replytocomment: {
       collection: 'comment',

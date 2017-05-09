@@ -71,5 +71,7 @@ const message = {
 	2206: "No matched comment.",
 	2207: "Error occurs when update a comment.",
 	2208: "Successfully update a comment.",
+	2209: "Successfully add one chaining comment.",
+	2210: "Error occurs when add a chaining comment.",
 	
 }

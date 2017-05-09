@@ -19,6 +19,7 @@ module.exports = {
 			post: postID
 		})
 		.populate('commentby')
+		.populate('replytocomment')
 		.exec(function(err, comments){
 			if (err) return ResponseService.json(400, res, 2200, err.Errors);
 			else {
@@ -34,7 +35,8 @@ module.exports = {
 						isRoot: comment.isRoot,
 						replytocomment: comment.replytocomment,
 						likes: comment.likes,
-						dislikes: comment.dislikes
+						dislikes: comment.dislikes,
+						createdAt: comment.createdAt,
 					}
 				});
 				return ResponseService.json(200, res, 2202, responseData);
@@ -70,6 +72,7 @@ module.exports = {
 					id: newComment.id
 				})
 				.populate('commentby')
+				.populate('replytocomment')
 				.exec(function(err, comment){
 					var responseData = {
 						id: comment.id,
@@ -82,9 +85,74 @@ module.exports = {
 						isRoot: comment.isRoot,
 						replytocomment: comment.replytocomment,
 						likes: comment.likes,
-						dislikes: comment.dislikes
+						dislikes: comment.dislikes,
+						createdAt: comment.createdAt,
 					};
 					return ResponseService.json(200, res, 2202, responseData);
+				});
+			});
+		});
+	},
+
+	/**
+	 * add one chaining comment
+	 * @param {obj} req 
+	 * @param {obj} res 
+	 */
+	addChainComment: function(req, res) {
+		var params = req.params.all();
+		var postID = parseInt(params.postID);
+		var email = params.email;
+		var content = params.content;
+		var fatherComment = params.commentID;
+		User.findOne({
+			email: email
+		})
+		.exec(function(err, user){
+			if (err) return ResponseService.json(400, res, 1001, err.Errors);
+			if (!user) return ResponseService.json(200, res, 1002);
+			Comment.findOne({
+				id: fatherComment
+			})
+			.exec(function(err, parentComment){
+				if (err) return ResponseService.json(400, res, 2205, err.Errors);
+				if (!parentComment) return ResponseService.json(200, res, 2206);
+				Comment.create({
+					content: content,
+					commentby: user.id,
+					post: postID,
+					isRoot: false,
+					repliedbycomment: parentComment
+				})
+				.exec(function(err, newComment){
+					if (err) return ResponseService.json(400, res, 2210, err.Errors);
+					Comment.find({
+						post: postID
+					})
+					.populate('commentby')
+					.populate('replytocomment')
+					.exec(function(err, comments){
+						if (err) return ResponseService.json(400, res, 2200, err.Errors);
+						else {
+							var responseData = comments.map(function(comment){
+								return {
+									id: comment.id,
+									content: comment.content,
+									commentby: {
+										username: comment.commentby.username,
+										email: comment.commentby.email
+									},
+									post: comment.post,
+									isRoot: comment.isRoot,
+									replytocomment: comment.replytocomment,
+									likes: comment.likes,
+									dislikes: comment.dislikes,
+									createdAt: comment.createdAt,
+								}
+							});
+							return ResponseService.json(200, res, 2209, responseData);
+						}
+					});
 				});
 			});
 		});
@@ -112,6 +180,7 @@ module.exports = {
 					id: commentID
 				})
 				.populate('commentby')
+				.populate('replytocomment')
 				.exec(function(err, comment){
 					if (err) return ResponseService.json(400, res, 2205, err.Errors);
 					if (!comment) return ResponseService.json(200, res, 2206);
@@ -127,7 +196,8 @@ module.exports = {
 							isRoot: comment.isRoot,
 							replytocomment: comment.replytocomment,
 							likes: comment.likes,
-							dislikes: comment.dislikes
+							dislikes: comment.dislikes,
+							createdAt: comment.createdAt,
 						};
 						return ResponseService.json(200, res, 2208, responseData);
 					}
@@ -158,6 +228,7 @@ module.exports = {
 					id: commentID
 				})
 				.populate('commentby')
+				.populate('replytocomment')
 				.exec(function(err, comment){
 					if (err) return ResponseService.json(400, res, 2205, err.Errors);
 					if (!comment) return ResponseService.json(200, res, 2206);
@@ -173,7 +244,8 @@ module.exports = {
 							isRoot: comment.isRoot,
 							replytocomment: comment.replytocomment,
 							likes: comment.likes,
-							dislikes: comment.dislikes
+							dislikes: comment.dislikes,
+							createdAt: comment.createdAt,
 						};
 						return ResponseService.json(200, res, 2208, responseData);
 					}
