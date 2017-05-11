@@ -39,6 +39,12 @@ module.exports = {
 		});
 	},
 
+	/**
+	 * Get top 5 posts
+	 * @param  {obj} req 
+	 * @param  {obj} res 
+	 * @return {obj}     
+	 */
 	getTopPosts: function(req, res) {
 		Post.find()
 		.exec(function(err, posts){
@@ -77,6 +83,7 @@ module.exports = {
 		.populate('author')
 		.populate('tags')
 		.populate('comments')
+		.populate('collectors')
 		.exec(function(err, post){
 			if(err) return ResponseService.json(400, res, 1503, err.Errors);
 			if(!post){
@@ -97,7 +104,15 @@ module.exports = {
 					};
 					post.author = userObj;
 					post.clicks = clicks;
-					return ResponseService.json(200, res, 1505, post);
+					var collectors;
+					if(!post.collectors){
+						collectors = [];
+					} else {
+						collectors = post.collectors.map(function(user){
+							return {email: user.email};
+						});
+					}
+					return ResponseService.json(200, res, 1505, {post: post, collectors: collectors});
 				});
 			}
 		});
@@ -261,16 +276,16 @@ module.exports = {
 	 * @param {obj} res
 	 * @return {obj}     success information or failure information
 	 */
-	updatePostWithCollection: function(req, res) {
+	updatePostWithLike: function(req, res) {
 		var params = req.params.all();
 		var postID = params.postID;
-		var addToCollection = params.addToCollection;
+		var addOneLike = params.addOneLike;
 		Post.findOne({
 			id: postID
 		})
 		.exec(function(err, post){
 			if(err) return ResponseService.json(400, res, 1503, err.Errors);
-			if(addToCollection){
+			if(addOneLike){
 				var newLikes = post.likes + 1;
 			} else {
 				var newLikes = post.likes - 1;
@@ -281,6 +296,47 @@ module.exports = {
 				else {
 					return ResponseService.json(200, res, 1517, updatedPost[0]);
 				}
+			});
+		});
+	},
+
+	updatePostWithCollection: function(req, res) {
+		var params = req.params.all();
+		var postID = params.postID;
+		var addOneCollection = params.addOneCollection;
+		var email = params.email;
+		Post.findOne({
+			id: postID
+		})
+		.exec(function(err, post){
+			if(err) return ResponseService.json(400, res, 1503, err.Errors);
+			if(addOneCollection){
+				var newCollection = post.collections + 1;
+			} else {
+				var newCollection = post.collections - 1;
+			}
+			User.findOne({
+				email: email
+			})
+			.exec(function(err, user){
+				if (err) return ResponseService.json(400, res, 1001, err.Errors);
+				if (!user) return ResponseService.json(200, res, 1002);
+				Post.update({id:postID},{collections:newCollection})
+				.exec(function(err, updatedPost){
+					if(err) return ResponseService.json(400, res, 1516, err.Errors);
+					else {
+						var collectedPost = updatedPost[0];
+						if(addOneCollection) {
+							collectedPost.collectors.add(user);
+						} else {
+							collectedPost.collectors.remove(user.id);
+						}
+						collectedPost.save(function(err) {
+							if (err) return ResponseService.json(400, res, 1522, err.Errors);
+							else return ResponseService.json(200, res, 1523, collectedPost);
+						});
+					}
+				});
 			});
 		});
 	},

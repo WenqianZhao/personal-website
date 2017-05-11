@@ -51,6 +51,10 @@ module.exports = {
       collection: 'post',
       via: 'author'
     },
+    collections: {
+      collection: 'post',
+      via: 'collectors'
+    },
     comments: {
       collection: 'comment',
       via: 'commentby'

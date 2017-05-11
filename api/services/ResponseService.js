@@ -55,6 +55,9 @@ const message = {
 	1519: "No post matched.",
 	1520: "Successfully find the matched posts",
 	1521: "Successfully get top5 posts.",
+	1522: "Error occurs when save a post's collectors.",
+	1523: "Successfully add a user as a post's collector.",
+	1524: "Successfully get all collectors.",
 
 	// 2000 ~ 2199 TagController
 	2000: "Error occurs when get all tags.",

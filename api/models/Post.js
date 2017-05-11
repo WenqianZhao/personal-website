@@ -40,6 +40,10 @@ module.exports = {
   		type: 'integer',
   		defaultsTo: 0
   	},
+    collections: {
+      type: 'integer',
+      defaultsTo: 0
+    },
   	reposts: {
   		type: 'integer',
   		defaultsTo: 0
@@ -47,7 +51,11 @@ module.exports = {
   	comments: {
   		collection: 'comment',
   		via: 'post'
-  	}
+  	},
+    collectors: {
+      collection: 'user',
+      via: 'collections'
+    }
   }
 };
 
