@@ -76,5 +76,8 @@ const message = {
 	2208: "Successfully update a comment.",
 	2209: "Successfully add one chaining comment.",
 	2210: "Error occurs when add a chaining comment.",
+
+	// 2700 ~ 2999 UserController
+	2700: "Successfully get all collections of one user",
 	
 }

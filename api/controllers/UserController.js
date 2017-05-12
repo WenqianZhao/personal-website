@@ -38,6 +38,12 @@ module.exports = {
 		});
 	},
 
+	/**
+	 * Change password
+	 * @param  {obj} req 
+	 * @param  {obj} res 
+	 * @return {obj}     
+	 */
 	changePassword: function(req, res) {
 		var params = req.params.all();
 		var email = params.email;
@@ -79,5 +85,48 @@ module.exports = {
 			  }
 			});
 		});
+	},
+
+	getAllCollections: function(req, res) {
+		var params = req.params.all();
+		var email = params.email;
+		User.findOne({
+			email: email
+		})
+		.populate('collections')
+		.exec(function(err, user){
+			if (err) return ResponseService.json(400, res, 1001, err.Errors);
+			if (!user) return ResponseService.json(200, res, 1002);
+			else {
+				var responseData = [];
+				if (user.collections) {
+					user.collections.forEach(function(collection, index, array){
+						Post.findOne({
+							id: collection.id
+						})
+						.populate('author')
+						.populate('tags')
+						.exec(function(err, onePost){
+							var postObj = {
+								post_id: onePost.id,
+								post_title: onePost.title,
+								post_abstract: onePost.abstract,
+								post_author: {
+									username: onePost.author.username,
+									email: onePost.author.email
+								},
+								post_tags: onePost.tags
+							}
+							responseData.push(postObj);
+							if (index === array.length - 1) {
+								return ResponseService.json(200, res, 2700, responseData);
+							}
+						});
+					});
+				} else {
+					return ResponseService.json(200, res, 2700, responseData);
+				}
+			}
+		}); 
 	},
 };

@@ -44,6 +44,7 @@ module.exports.routes = {
 
   'post /user/modify': 'UserController.modify',
   'post /user/changepwd': 'UserController.changePassword',
+  'post /user/getallcollections': 'UserController.getAllCollections',
 
   'get /posts/getall': 'PostController.getAllPosts',
   'get /posts/gettop': 'PostController.getTopPosts',
