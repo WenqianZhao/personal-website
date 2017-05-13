@@ -250,7 +250,7 @@ module.exports = {
 		})
 		.exec(function(err, post){
 			if(err) return ResponseService.json(400, res, 1503, err.Errors);
-			if(post) return ResponseService.json(200, res, 1506);
+			if(post.id !== id) return ResponseService.json(200, res, 1506);
 			else {
 				// create post
 				Post.update({
