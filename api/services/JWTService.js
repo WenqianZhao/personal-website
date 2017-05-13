@@ -18,5 +18,10 @@ module.exports = {
 
 	verifyJWT: function(token, callback) {
 		return jwt.verify(token, secret, {}, callback);
+	},
+
+	issueJWT: function (payload) {
+		token = jwt.sign(payload, secret, {expiresIn: "1h"});
+		return token;
 	}
 }

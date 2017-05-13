@@ -39,6 +39,7 @@ module.exports.routes = {
   'get /login': {view : 'auth/login'},
   'get /signup': {view : 'auth/signup'},
 
+  'post /token/refresh': 'AuthController.refreshToken',
   'post /login': 'AuthController.login',
   'post /signup': 'AuthController.signup',
 

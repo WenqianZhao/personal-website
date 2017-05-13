@@ -63,6 +63,10 @@ module.exports = {
   		type: 'string',
   		enum: ['Admin', 'NormalUser']
   	},
+    isActive: {
+      type: 'boolean',
+      defaultsTo: true
+    }
   }
 };
 

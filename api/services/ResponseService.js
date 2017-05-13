@@ -31,6 +31,9 @@ const message = {
 	1009: "Successfully update a user.",
 	1010: "Error occurs when changing password.",
 	1011: "Successfully changed password.",
+	1012: "Error occurs when verifying token.",
+	1013: "Successfully refresh token.",
+	1014: "User is not active now.",
 
 	// 1500 ~ 1999 PostController
 	1500: "Error occurs when find all posts.",

@@ -7,7 +7,21 @@
 var bcrypt = require('bcrypt');
 
 module.exports = {
-	signup: function(req, res) {
+	refreshToken: function (req, res) {
+		var params = req.params.all();
+		var token = params.token;
+		return JWTService.verifyJWT(token, function (err, payload) {
+			if (err) return ResponseService.json(200, res, 1012);
+			delete payload.iat;
+			delete payload.exp;
+			var responseData = {
+				token: JWTService.issueJWT(payload)
+			};
+			return ResponseService.json(200, res, 1013, responseData);
+		});
+	},
+
+	signup: function (req, res) {
 		var params = req.params.all();
 		var username = params.username;
 		var email = params.email;
@@ -16,14 +30,14 @@ module.exports = {
 		User.findOne({
 			email: email
 		})
-		.exec(function(err, user){
+		.exec(function (err, user) {
 			if (err) return ResponseService.json(400, res, 1001, err.Errors);
 			if (user) return ResponseService.json(200, res, 1006);
 			else{
 				User.findOne({
 					username: username
 				})
-				.exec(function(err, user2){
+				.exec(function (err, user2) {
 					if (err) return ResponseService.json(400, res, 1001, err.Errors);
 					if (user2) return ResponseService.json(200, res, 1006);
 					else{
@@ -52,7 +66,7 @@ module.exports = {
 		});
 	},
 
-	login: function(req, res) {
+	login: function (req, res) {
 		var params = req.params.all();
 		var email = params.email;
 		var password = params.password;
@@ -62,18 +76,21 @@ module.exports = {
 		.exec(function(err, user){
 			if (err) return ResponseService.json(400, res, 1001, err.Errors);
 			if (!user) return ResponseService.json(200, res, 1002);
-			bcrypt.compare(password, user.password_hash, function(err, valid) {
-			  if (err) return ResponseService.json(200, res, 1003, err.Errors);;
-			  // valid === true
-			  if(valid) {
-			  	var responseData = {
-					token: JWTService.generateJWT(user)
-				}
-			  	return ResponseService.json(200, res, 1004, responseData);
-			  } else {
-			  	return ResponseService.json(200, res, 1005);
-			  }
-			});
+			if (!user.isActive) return ResponseService.json(200, res, 1014);
+			else {
+				bcrypt.compare(password, user.password_hash, function(err, valid) {
+				    if (err) return ResponseService.json(200, res, 1003, err.Errors);;
+				    // valid === true
+				    if(valid) {
+				  	    var responseData = {
+						    token: JWTService.generateJWT(user)
+						}
+				  		return ResponseService.json(200, res, 1004, responseData);
+				  	} else {
+				  		return ResponseService.json(200, res, 1005);
+				  	}
+				});
+			}
 		});
 	},
 };
