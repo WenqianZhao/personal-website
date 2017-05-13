@@ -8,10 +8,32 @@ var bcrypt = require('bcrypt');
 
 module.exports = {
 	/**
+	 * Get all users' info
+	 * @param  {obj} req 
+	 * @param  {obj} res 
+	 * @return {obj}     return response object
+	 */
+	getAllUsers: function (req, res) {
+		User.find()
+		.exec(function (err, users) {
+			if (err) return ResponseService.json(400, res, 2701, err.Errors);
+			var responseData = users.map(function (user) {
+				return {
+					username: user.username,
+					email: user.email,
+					isActive: user.isActive,
+					role: user.role
+				}
+			});
+			return ResponseService.json(200, res, 2702, responseData);
+		});
+	},
+
+	/**
 	 * Modify a user
 	 * @param  {obj} req 
 	 * @param  {obj} res 
-	 * @return {obj}     return response object2
+	 * @return {obj}     return response object
 	 */
 	modify: function(req, res) {
 		var params = req.params.all();
