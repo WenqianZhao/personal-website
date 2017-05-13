@@ -64,6 +64,11 @@ module.exports.routes = {
   'post /comment/update/dislike': 'CommentController.updateCommentDisLikes',
   'post /comments/add/chain': 'CommentController.addChainComment',
 
+  'get /contact/getall': 'ContactController.getAllAdvices',
+  'post /contact/add': 'ContactController.createAdvice',
+  'post /contact/delete': 'ContactController.deleteOneAdvice',
+  'post /contact/getone': 'ContactController.getOneAdvice',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

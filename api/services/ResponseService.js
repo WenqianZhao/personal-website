@@ -78,6 +78,17 @@ const message = {
 	2210: "Error occurs when add a chaining comment.",
 
 	// 2700 ~ 2999 UserController
-	2700: "Successfully get all collections of one user",
+	2700: "Successfully get all collections of one user.",
 	
+	// 3000 ~ 3099 ContactController
+	3000: "Error occurs when create a new advice.",
+	3001: "Successfully create a new advice.",
+	3002: "Error occurs when find all advice.",
+	3003: "No advice yet.",
+	3004: "Successfully get all advices.",
+	3005: "Error occurs when delete one advice.",
+	3006: "Successfully delete one advice.",
+	3007: "Error occurs when get one advice.",
+	3008: "Successfully get one advice.",
+
 }
