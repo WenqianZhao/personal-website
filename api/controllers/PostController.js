@@ -270,6 +270,38 @@ module.exports = {
 		});
 	},
 
+	deletePost: function (req, res) {
+		var params = req.params.all();
+		var id = params.postID;
+		Post.destroy({
+			id: id
+		})
+		.exec(function (err) {
+			if (err) return ResponseService.json(400, res, 1525, err.Errors);
+			else {
+				Tag.find()
+				.populate('posts')
+				.exec(function (err, tags) {
+					tags.forEach( function (tag, index, array) {
+						if (tag.posts.length === 0) {
+							Tag.destroy({
+								id: tag.id
+							})
+							.exec(function (err) {
+								if (err) return ResponseService.json(400, res, 1528, err.Errors);
+								else {
+									if (index === array.length-1) {
+										return ResponseService.json(200, res, 1526);
+									}
+								}
+							});
+						}
+					});
+				});
+			}
+		});
+	},
+
 	/**
 	 * Add post to a user's collection or remove it from one's collection (for now just update post's likes attribute)
 	 * @param {obj} req 

@@ -61,6 +61,11 @@ const message = {
 	1522: "Error occurs when save a post's collectors.",
 	1523: "Successfully add a user as a post's collector.",
 	1524: "Successfully get all collectors.",
+	1525: "Error occurs when delete a post.",
+	1526: "Successfully delete a post.",
+	1527: "Error occurs when find a tag.",
+	1528: "Error occurs when delete a tag.",
+	
 
 	// 2000 ~ 2199 TagController
 	2000: "Error occurs when get all tags.",
