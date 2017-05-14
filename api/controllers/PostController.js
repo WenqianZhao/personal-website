@@ -173,7 +173,7 @@ module.exports = {
 		var params = req.params.all();
 		var title = params.title;
 		var content = params.content;
-		var tags = params.tags.split(',');
+		var tags = params.tags.split(',').map( tag => tag.trim());
 		var abstract = params.abstract;
 		var authorEmail = params.email;
 		// count the number of tags added
