@@ -121,7 +121,7 @@ module.exports = {
 			if (!user) return ResponseService.json(200, res, 1002);
 			else {
 				var responseData = [];
-				if (user.collections) {
+				if (user.collections.length !== 0) {
 					user.collections.forEach(function(collection, index, array){
 						Post.findOne({
 							id: collection.id
@@ -146,7 +146,7 @@ module.exports = {
 						});
 					});
 				} else {
-					return ResponseService.json(200, res, 2700, responseData);
+					return ResponseService.json(200, res, 2703);
 				}
 			}
 		}); 

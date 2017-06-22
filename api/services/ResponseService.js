@@ -89,6 +89,7 @@ const message = {
 	2700: "Successfully get all collections of one user.",
 	2701: "Error occurs when get all users.",
 	2702: "Successfully get all users.",
+	2703: "No collection for this user.",
 	
 	// 3000 ~ 3099 ContactController
 	3000: "Error occurs when create a new advice.",
