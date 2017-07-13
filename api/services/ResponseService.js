@@ -102,4 +102,13 @@ const message = {
 	3007: "Error occurs when get one advice.",
 	3008: "Successfully get one advice.",
 
+	// 3100 ~ 3199 TodolistController
+	3100: "Error occurs when find todolist of a user.",
+	3101: "No todolist found for such user.",
+	3102: "Successfully get all todolist items of a user.",
+	3103: "Error occurs when create a new todolist item.",
+	3104: "Successfully add a new todolist item.",
+	3105: "Error occurs when modify a new todolist item.",
+	3106: "Successfully modify a new todolist item.",
+
 }

@@ -72,6 +72,10 @@ module.exports.routes = {
   'post /contact/delete': 'ContactController.deleteOneAdvice',
   'post /contact/getone': 'ContactController.getOneAdvice',
 
+  'post /app/todolist/getallitems': 'TodolistController.getAllItems',
+  'post /app/todolist/addnewitem': 'TodolistController.addItemToList',
+  'post /app/todolist/modifyitem': 'TodolistController.modifyItem',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

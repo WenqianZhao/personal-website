@@ -66,6 +66,10 @@ module.exports = {
     isActive: {
       type: 'boolean',
       defaultsTo: true
+    },
+    todolists: {
+      collection: 'todolist',
+      via: 'owner'
     }
   }
 };
