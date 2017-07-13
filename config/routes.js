@@ -75,6 +75,8 @@ module.exports.routes = {
   'post /app/todolist/getallitems': 'TodolistController.getAllItems',
   'post /app/todolist/addnewitem': 'TodolistController.addItemToList',
   'post /app/todolist/modifyitem': 'TodolistController.modifyItem',
+  'post /app/todolist/deleteitem': 'TodolistController.deleteItem',
+  'post /app/todolist/assigntohavefinished': 'TodolistController.assignToHaveFinished',
 
   /***************************************************************************
   *                                                                          *

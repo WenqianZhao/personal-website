@@ -33,11 +33,43 @@ module.exports = {
 						return ResponseService.json(200, res, 3101);
 					} else {
 						var responseData = todolists.map(function (item) {
-							return {
-								id: item.id,
-								content: item.content,
-								deadline: item.deadline,
-								importance: item.importance
+							var today = new Date();
+							var deadline = new Date(item.deadline);
+							var daysRemain = (deadline - today)/(24*60*60*1000);
+							if (itemClass === 'toDoList') {
+								if (daysRemain < -1) {
+									// over the deadline
+									// change the listclass to 'overTime'
+									Todolist.update({
+										id: item.id
+									},{
+										listclass: 'overTime'
+									})
+									.exec(function (err, todolist) {
+										if (err) return ResponseService.json(400, res, 3109, err.Errors);
+									});
+								} else {
+									return {
+										id: item.id,
+										content: item.content,
+										importance: item.importance,
+										daysRemain: parseInt(daysRemain)
+									}
+								}
+							} else if (itemClass === 'haveDone') {
+								return {
+									id: item.id,
+									content: item.content,
+									importance: item.importance,
+									finishedTime: item.finishedTime.getFullYear() + '-' + (((item.finishedTime.getMonth()+1) < 10) ? ('0'+(item.finishedTime.getMonth()+1)) : (item.finishedTime.getMonth()+1)) + '-' + item.finishedTime.getDate()
+								}
+							} else {
+								return {
+									id: item.id,
+									content: item.content,
+									importance: item.importance,
+									deadline: item.deadline
+								}
 							}
 						});
 						return ResponseService.json(200, res, 3102, responseData);
@@ -86,6 +118,34 @@ module.exports = {
 		.exec(function (err, todolist) {
 			if (err) return ResponseService.json(400, res, 3105, err.Errors);
 			return ResponseService.json(200, res, 3106, todolist);
+		}); 
+	},
+
+	deleteItem: function (req, res) {
+		var params = req.params.all();
+		var id = params.id;
+		Todolist.destroy({
+			id: id
+		})
+		.exec(function (err) {
+			if (err) return ResponseService.json(400, res, 3107, err.Errors);
+			else return ResponseService.json(200, res, 3108);
+		});
+	},
+
+	assignToHaveFinished: function (req, res) {
+		var params = req.params.all();
+		var id = params.id;
+		var newClass = params.newClass;
+		Todolist.update({
+			id: id
+		},{
+			listclass: newClass,
+			finishedTime: new Date()
+		})
+		.exec(function (err, todolist) {
+			if (err) return ResponseService.json(400, res, 3109, err.Errors);
+			return ResponseService.json(200, res, 3110);
 		}); 
 	}
 }

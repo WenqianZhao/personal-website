@@ -110,5 +110,9 @@ const message = {
 	3104: "Successfully add a new todolist item.",
 	3105: "Error occurs when modify a new todolist item.",
 	3106: "Successfully modify a new todolist item.",
+	3107: "Error occurs when delete a todolist item.",
+	3108: "Successfully delete a todolist item.",
+	3109: "Error occurs when change an item's class.",
+	3110: "Successfully change an item's class.",
 
 }

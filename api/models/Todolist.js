@@ -25,6 +25,9 @@ module.exports = {
       type: 'string',
       enum: ['toDoList', 'haveDone', 'overTime'],
       required: true
+    },
+    finishedTime: {
+      type: 'date'
     }
   }
 };
