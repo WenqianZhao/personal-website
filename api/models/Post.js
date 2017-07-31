@@ -55,6 +55,9 @@ module.exports = {
     collectors: {
       collection: 'user',
       via: 'collections'
+    },
+    category: {
+      model: 'category'
     }
   }
 };

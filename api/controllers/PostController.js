@@ -163,6 +163,51 @@ module.exports = {
 		});
 	},
 
+
+	/**
+	 * get posts by category
+	 * @param  {obj} req 
+	 * @param  {obj} res 
+	 * @return {obj}     all the posts of a category
+	 */
+	getPostByCategory: function(req, res) {
+		var params = req.params.all();
+		var content = params.content;
+		Category.findOne({
+			content: content
+		})
+		.exec(function (err, category) {
+			if (err) return ResponseService.json(400, res, 3203, err.Errors);
+			else if (!category) return ResponseService.json(200, res, 3207);
+			else {
+				Post.find({
+					category: category.id
+				})
+				.populate('author')
+				.populate('tags')
+				.exec(function (err, posts) {
+					if (err) return ResponseService.json(400, res, 1529, err.Errors);
+					else if (posts.length == 0) return ResponseService.json(200, res, 1530);
+					else {
+						var responseData = posts.map(function (onePost) {
+							return {
+								post_id: onePost.id,
+								post_title: onePost.title,
+								post_abstract: onePost.abstract,
+								post_author: {
+									username: onePost.author.username,
+									email: onePost.author.email
+								},
+								post_tags: onePost.tags
+							}
+						});
+						return ResponseService.json(200, res, 1531, responseData);
+					}
+				});
+			}
+		});
+	},
+
 	/**
 	 * Create a new post
 	 * @param  {obj} req 
@@ -273,32 +318,58 @@ module.exports = {
 	deletePost: function (req, res) {
 		var params = req.params.all();
 		var id = params.postID;
-		Post.destroy({
+		Post.findOne({
 			id: id
 		})
-		.exec(function (err) {
-			if (err) return ResponseService.json(400, res, 1525, err.Errors);
-			else {
-				Tag.find()
-				.populate('posts')
-				.exec(function (err, tags) {
-					tags.forEach( function (tag, index, array) {
-						if (tag.posts.length === 0) {
-							Tag.destroy({
-								id: tag.id
-							})
-							.exec(function (err) {
-								if (err) return ResponseService.json(400, res, 1528, err.Errors);
-								else {
-									if (index === array.length-1) {
-										return ResponseService.json(200, res, 1526);
-									}
-								}
-							});
-						}
+		.exec(function (err, post) {
+			if(err) return ResponseService.json(400, res, 1503, err.Errors);
+			var categoryID = post.category;
+			if (categoryID) {
+				Category.findOne({
+					id: categoryID
+				})
+				.exec(function (err, category) {
+					if (err) return ResponseService.json(400, res, 3203, err.Errors);
+					var numberofposts = category.numberofposts;
+					Category.update({
+						id: categoryID
+					},{
+						numberofposts: numberofposts-1
+					})
+					.exec(function (err, newCategory) {
+						if (err) return ResponseService.json(400, res, 3208);
 					});
 				});
 			}
+			Post.destroy({
+				id: id
+			})
+			.exec(function (err) {
+				if (err) return ResponseService.json(400, res, 1525, err.Errors);
+				else {
+					Tag.find()
+					.populate('posts')
+					.exec(function (err, tags) {
+						tags.forEach( function (tag, index, array) {
+							if (tag.posts.length === 0) {
+								Tag.destroy({
+									id: tag.id
+								})
+								.exec(function (err) {
+									if (err) return ResponseService.json(400, res, 1528, err.Errors);
+									else {
+										if (index === array.length-1) {
+											return ResponseService.json(200, res, 1526);
+										}
+									}
+								});
+							} else if (index === array.length-1) {
+								return ResponseService.json(200, res, 1526);
+							}
+						});
+					});
+				}
+			});
 		});
 	},
 

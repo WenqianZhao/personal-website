@@ -58,6 +58,7 @@ module.exports.routes = {
   'post /posts/updatelike': 'PostController.updatePostWithLike',
   'post /posts/updatecollect': 'PostController.updatePostWithCollection',
   'post /posts/search': 'PostController.searchPosts',
+  'post /posts/getbycategory': 'PostController.getPostByCategory',
 
   'get /tags/getall': 'TagController.getAllTags',
 
@@ -77,6 +78,11 @@ module.exports.routes = {
   'post /app/todolist/modifyitem': 'TodolistController.modifyItem',
   'post /app/todolist/deleteitem': 'TodolistController.deleteItem',
   'post /app/todolist/assigntohavefinished': 'TodolistController.assignToHaveFinished',
+
+  'get /category/getall': 'CategoryController.getAllCategories',
+  'post /category/createone': 'CategoryController.createCategory',
+  'post /category/addpost': 'CategoryController.addPostToCategory',
+
 
   /***************************************************************************
   *                                                                          *

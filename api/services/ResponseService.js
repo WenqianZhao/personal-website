@@ -65,6 +65,9 @@ const message = {
 	1526: "Successfully delete a post.",
 	1527: "Error occurs when find a tag.",
 	1528: "Error occurs when delete a tag.",
+	1529: "Error occurs when find a post by category.",
+	1530: "No posts found for such category.",
+	1531: "Successfully find all posts by category.",
 	
 
 	// 2000 ~ 2199 TagController
@@ -115,4 +118,15 @@ const message = {
 	3109: "Error occurs when change an item's class.",
 	3110: "Successfully change an item's class.",
 
+	// 3200 ~ 3299 CategoryController
+	3200: "Error occurs when find all categories.",
+	3201: "No category is created.",
+	3202: "Successfully find all categories.",
+	3203: "Error occurs when find a category.",
+	3204: "Category already exists.",
+	3205: "Error occurs when create a new category.",
+	3206: "Successfully create a new category.",
+	3207: "No such category.",
+	3208: "Error occurs when update a category.",
+	3209: "Successfully update a category.",
 }
